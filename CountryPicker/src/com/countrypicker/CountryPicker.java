@@ -68,6 +68,10 @@ public class CountryPicker extends DialogFragment implements
 		return searchEditText;
 	}
 
+	public ListView getCountryListView() {
+		return countryListView;
+	}
+
 	/**
 	 * Convenient function to get currency code from country code currency code
 	 * is in English locale
