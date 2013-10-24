@@ -14,6 +14,8 @@ import java.util.Locale;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -21,7 +23,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -161,14 +162,12 @@ public class CountryPicker extends DialogFragment implements
 		return picker;
 	}
 
-	/**
-	 * Create view
-	 */
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		// Inflate view
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		LayoutInflater inflater = getActivity().getLayoutInflater();
+
 		View view = inflater.inflate(R.layout.country_picker, null);
+		builder.setView(view);
 
 		// Get countries from the json
 		getAllCountries();
@@ -229,7 +228,9 @@ public class CountryPicker extends DialogFragment implements
 			}
 		});
 
-		return view;
+		builder.setInverseBackgroundForced(true);
+
+		return builder.create();
 	}
 
 	/**
