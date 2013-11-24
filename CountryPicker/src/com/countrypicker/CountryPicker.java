@@ -207,6 +207,7 @@ public class CountryPicker extends DialogFragment implements
 					listener.onSelectCountry(country.getName(),
 							country.getCode());
 				}
+				dismiss();
 			}
 		});
 
