@@ -17,6 +17,37 @@ The functions are simple:
 
 3) Convenient function to get currency code of the selected country
 
+## How to use
+
+To embed CountryPicker in your own view:
+
+```java
+FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+CountryPicker picker = new CountryPicker();
+transaction.replace(R.id.home, picker);
+transaction.commit();
+```
+
+To show CountryPicker as a dialog:
+
+```java
+CountryPicker picker = CountryPicker.newInstance("Select Country");
+picker.show(getSupportFragmentManager(), "COUNTRY_PICKER");
+```
+
+When user selects a country, client can listen to that event:
+
+```java
+picker.setListener(new CountryPickerListener() {
+
+	@Override
+	public void onSelectCountry(String name, String code) {
+		// Invoke your function here
+	}
+});
+				
+```
+
 ## About
 The data is from CountryPicker by nicklockwood (https://github.com/nicklockwood/CountryPicker)
 
