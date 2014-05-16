@@ -1,8 +1,5 @@
 package com.countrypicker;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,6 +16,8 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,6 +99,7 @@ public class CountryPicker extends DialogFragment implements
 
 				// Read from local file
 				String allCountriesString = readFileAsString(getActivity());
+				Log.d("countrypicker", "country: " + allCountriesString);
 				JSONObject jsonObject = new JSONObject(allCountriesString);
 				Iterator<?> keys = jsonObject.keys();
 
@@ -130,7 +130,8 @@ public class CountryPicker extends DialogFragment implements
 	}
 
 	/**
-	 * Convenient function to read from raw file
+	 * R.string.countries is a json string which is Base64 encoded to avoid
+	 * special characters in XML. It's Base64 decoded here to get original json.
 	 * 
 	 * @param context
 	 * @return
@@ -138,17 +139,9 @@ public class CountryPicker extends DialogFragment implements
 	 */
 	private static String readFileAsString(Context context)
 			throws java.io.IOException {
-		InputStream inputStream = context.getResources().openRawResource(
-				R.raw.countries);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				inputStream));
-		StringBuffer result = new StringBuffer();
-		String line;
-		while ((line = reader.readLine()) != null) {
-			result.append(line);
-		}
-		reader.close();
-		return result.toString();
+		String base64 = context.getResources().getString(R.string.countries);
+		byte[] data = Base64.decode(base64, Base64.DEFAULT);
+		return new String(data, "UTF-8");
 	}
 
 	/**
