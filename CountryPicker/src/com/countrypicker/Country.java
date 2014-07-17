@@ -1,12 +1,17 @@
 package com.countrypicker;
 
-/**
- * POJO
- *
- */
 public class Country {
+
 	private String code;
 	private String name;
+
+	public Country() {
+	}
+
+	public Country(String name, String code) {
+		this.name = name;
+		this.code = code;
+	}
 
 	public String getCode() {
 		return code;
