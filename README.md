@@ -48,6 +48,24 @@ picker.setListener(new CountryPickerListener() {
 				
 ```
 
+When use custom list countries:
+
+```java
+ArrayList<Country> countriesList = new ArrayList<Country>();
+
+countriesList.add(new Country("United States", "US"));
+countriesList.add(new Country("Brazil", "BR"));
+// add Countries to list.
+
+picker.setCountryList(customCountriesList);
+```
+
+When use list of Countries ( `java.util.Locale.getISOCountries()`) based on ISO 3166 country codes that can be used as the country code when constructing a Locale:
+
+```java
+picker.setCountryListByDefaultLocale();
+```
+
 ## About
 The data is from CountryPicker by nicklockwood (https://github.com/nicklockwood/CountryPicker)
 

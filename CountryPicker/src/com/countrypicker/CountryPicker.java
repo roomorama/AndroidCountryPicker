@@ -124,9 +124,16 @@ public class CountryPicker extends DialogFragment implements
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				return allCountriesList;
 			}
+		} else {
+			// Initialize selected countries with all Custom Countries
+			selectedCountriesList = new ArrayList<Country>();
+			selectedCountriesList.addAll(allCountriesList);
+
+			return allCountriesList;
 		}
-		return null;
+
 	}
 
 	/**
@@ -255,6 +262,110 @@ public class CountryPicker extends DialogFragment implements
 	@Override
 	public int compare(Country lhs, Country rhs) {
 		return lhs.getName().compareTo(rhs.getName());
+	}
+
+	/**
+	 * <b>Is not guaranteed to have the country flag.</b> <br>
+	 * 
+	 * Set the custom Countries List.
+	 * 
+	 * @param customCountriesList
+	 *            List the personal Countries.
+	 */
+	public void setCountryList(ArrayList<Country> customCountriesList) {
+		allCountriesList = customCountriesList;
+	}
+
+	/**
+	 * <b>Is not guaranteed to have the country flag.</b> <br>
+	 * 
+	 * This method create list of Countries based on "ISO 3166 country codes
+	 * that can be used as the country code when constructing a Locale".
+	 * 
+	 * @see java.util.Locale#getISOCountries()
+	 * @see java.util.Locale#getDisplayCountry()
+	 * 
+	 * @return List of Countries created (use if necessary).
+	 */
+	public ArrayList<Country> setCountryListByDefaultLocale() {
+		ArrayList<Country> countriesList = new ArrayList<Country>();
+		String[] isoCountries = Locale.getISOCountries();
+		for (String isoCountry : isoCountries) {
+			countriesList.add(new Country(new Locale("", isoCountry)
+					.getDisplayCountry(), isoCountry));
+		}
+		allCountriesList = countriesList;
+		return countriesList;
+	}
+
+	/**
+	 * <b>Is not guaranteed to have the country flag.</b> <br>
+	 * 
+	 * Adds the specified Country at the end of this List.
+	 * 
+	 * @param country
+	 *            Country to add.
+	 * 
+	 * @throws UnsupportedOperationException
+	 *             if adding to this List is not supported.
+	 * 
+	 * @throws ClassCastException
+	 *             if the class of the object is inappropriate for this List
+	 * 
+	 * @throws IllegalArgumentException
+	 *             if the object cannot be added to this List.
+	 */
+	public void addCountry(Country country) {
+		allCountriesList.add(country);
+	}
+
+	/**
+	 * <b>Is not guaranteed to have the country flag.</b> <br>
+	 * 
+	 * Inserts the Country into this List at the specified location. The Country
+	 * is inserted before the current element at the specified location. If the
+	 * location is equal to the size of this List, the object is added at the
+	 * end. If the location is smaller than the size of this List, then all
+	 * elements beyond the specified location are moved by one position towards
+	 * the end of the List.
+	 * 
+	 * @param location
+	 *            the index at which to insert.
+	 * @param country
+	 *            Country to add.
+	 * 
+	 * @throws UnsupportedOperationException
+	 *             if adding to this List is not supported.
+	 * 
+	 * @throws ClassCastException
+	 *             if the class of the object is inappropriate for this List
+	 * 
+	 * @throws IllegalArgumentException
+	 *             if the object cannot be added to this List.
+	 * 
+	 * 
+	 * @throws IndexOutOfBoundsException
+	 *             if location < 0 || location > size()
+	 */
+	public void addCountry(int location, Country country) {
+		allCountriesList.add(location, country);
+	}
+
+	/**
+	 * /** Removes the object at the specified location from this List.
+	 * 
+	 * @param location
+	 *            the index of the object to remove.
+	 * @return the removed object.
+	 * 
+	 * @throws UnsupportedOperationException
+	 *             if removing from this List is not supported
+	 * 
+	 * @throws IndexOutOfBoundsException
+	 *             if location < 0 || location >= size()
+	 */
+	public Country remove(int location) {
+		return allCountriesList.remove(location);
 	}
 
 }
