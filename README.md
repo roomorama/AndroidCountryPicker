@@ -1,6 +1,13 @@
 AndroidCountryPicker
 ====================
 
+dpolishuk: I added support for gradle build. Also you can build CountryPicker as aar library.
+
+As always, you can build this library in this way:
+```bash
+./gradlew clean build
+```
+
 ## Features
 CountryPicker is a simple fragment that can be embedded or shown as dialog. See the example to see more detail.
 
