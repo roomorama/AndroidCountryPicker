@@ -4,20 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Currency;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,18 +91,10 @@ public class CountryPicker extends DialogFragment implements
             try {
                 allCountriesList = new ArrayList<Country>();
 
-                // Read from local file
-                String allCountriesString = readFileAsString(getActivity());
-                Log.d("countrypicker", "country: " + allCountriesString);
-                JSONObject jsonObject = new JSONObject(allCountriesString);
-                Iterator<?> keys = jsonObject.keys();
-
-                // Add the data to all countries list
-                while (keys.hasNext()) {
-                    String key = (String) keys.next();
+                for (String cc : Locale.getISOCountries()) {
                     Country country = new Country();
-                    country.setCode(key);
-                    country.setName(jsonObject.getString(key));
+                    country.setCode(cc);
+                    country.setName(new Locale("", cc).getDisplayCountry());
                     allCountriesList.add(country);
                 }
 
@@ -127,21 +113,6 @@ public class CountryPicker extends DialogFragment implements
             }
         }
         return null;
-    }
-
-    /**
-     * R.string.countries is a json string which is Base64 encoded to avoid
-     * special characters in XML. It's Base64 decoded here to get original json.
-     *
-     * @param context
-     * @return
-     * @throws java.io.IOException
-     */
-    private static String readFileAsString(Context context)
-            throws java.io.IOException {
-        String base64 = context.getResources().getString(R.string.countries);
-        byte[] data = Base64.decode(base64, Base64.DEFAULT);
-        return new String(data, "UTF-8");
     }
 
     /**
