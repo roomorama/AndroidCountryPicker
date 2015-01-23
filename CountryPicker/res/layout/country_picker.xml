@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:hint="@string/search"
-        android:drawableLeft="@drawable/search_icon" />
+        android:drawableLeft="@drawable/search_icon"
+        android:drawableStart="@drawable/search_icon" />
 
     <ListView
         android:id="@+id/country_picker_listview"

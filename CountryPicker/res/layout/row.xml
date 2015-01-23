@@ -9,6 +9,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:contentDescription="@string/Flag"
         android:padding="10dp" />
 
     <TextView
