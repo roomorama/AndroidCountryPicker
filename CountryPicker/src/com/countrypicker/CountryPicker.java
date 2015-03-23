@@ -1,5 +1,6 @@
 package com.countrypicker;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -47,6 +48,12 @@ public class CountryPicker extends DialogFragment implements
 	 * Listener to which country user selected
 	 */
 	private CountryPickerListener listener;
+
+	/**
+	 * Use collator to sort locale-aware.
+	 */
+	private static final Collator sCollator = Collator.getInstance();
+
 
 	/**
 	 * Set listener
@@ -225,7 +232,7 @@ public class CountryPicker extends DialogFragment implements
 	 */
 	@Override
 	public int compare(Country lhs, Country rhs) {
-		return lhs.getName().compareTo(rhs.getName());
+		return sCollator.compare(lhs.getName(), rhs.getName());
 	}
 
 }
