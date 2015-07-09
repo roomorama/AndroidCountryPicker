@@ -196,15 +196,17 @@ public class CountryPicker extends DialogFragment implements
 		// Inform listener
 		countryListView.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				if (listener != null) {
-					Country country = selectedCountriesList.get(position);
-					listener.onSelectCountry(country.getName(),
-							country.getCode());
-				}
-			}
+		        @Override
+		        public void onItemClick(AdapterView<?> parent, View view,
+		                int position, long id) {
+		            if (listener != null) {
+		                Country country = selectedCountriesList.get(position);
+		                listener.onSelectCountry(country.getName(),
+		                        country.getCode(),
+		                        country.getCountryCode()
+		                );
+		            }
+		        }
 		});
 
 		// Search for which countries matched user query
