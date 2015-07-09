@@ -17,7 +17,31 @@ public class Country {
 	}
 
 	public String getName() {
-		return name;
+	    String lpszName = name;
+	
+	    if (name != null && name.isEmpty() == false) {
+	        String[] lpszNames = name.split(";");
+	
+	        if (lpszNames.length == 2) {
+	            lpszName = lpszNames[1].trim();
+	        }
+	    }
+	
+	    return lpszName;
+	}
+	
+	public String getCountryCode() {
+	    String lpszName = "";
+	
+	    if (name != null && name.isEmpty() == false) {
+	        String[] lpszNames = name.split(";");
+	
+	        if (lpszNames.length == 2) {
+	            lpszName = lpszNames[0].trim();
+	        }
+	    }
+	
+	    return lpszName;
 	}
 
 	public void setName(String name) {
