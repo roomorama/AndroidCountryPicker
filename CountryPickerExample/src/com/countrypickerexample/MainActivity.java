@@ -26,13 +26,14 @@ public class MainActivity extends FragmentActivity {
 		picker.setListener(new CountryPickerListener() {
 
 			@Override
-			public void onSelectCountry(String name, String code) {
-				Toast.makeText(
-						MainActivity.this,
-						"Country Name: " + name + " - Code: " + code
-								+ " - Currency: "
-								+ CountryPicker.getCurrencyCode(code),
-						Toast.LENGTH_SHORT).show();
+			public void onSelectCountry(String name, String code, String ccode) {
+		            Toast.makeText(
+		                    getActivity(),
+		                    "Country Name: " + name + " - Code: " + code
+		                            + " - Ccode: " + ccode
+		                            + " - Currency: "
+		                            + CountryPicker.getCurrencyCode(code),
+		                    Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -55,10 +56,11 @@ public class MainActivity extends FragmentActivity {
 				picker.setListener(new CountryPickerListener() {
 
 					@Override
-					public void onSelectCountry(String name, String code) {
+					public void onSelectCountry(String name, String code, String ccode) {
 						Toast.makeText(
 								MainActivity.this,
 								"Country Name: " + name + " - Code: " + code
+										+ " - Ccode: " + ccode
 										+ " - Currency: "
 										+ CountryPicker.getCurrencyCode(code),
 								Toast.LENGTH_SHORT).show();
