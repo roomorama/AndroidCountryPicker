@@ -7,9 +7,6 @@ android {
     defaultConfig {
         minSdkVersion 8
         targetSdkVersion 17
-        // Gets received by jitpack:
-        //versionCode 11
-        //versionName '1.0.1'
         applicationId 'com.countrypicker.example'
     }
     buildTypes {
@@ -23,7 +20,14 @@ android {
     }
 }
 
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
 dependencies {
     compile 'com.android.support:support-v4:23.0.0'
-    compile project(':CountryPicker')
+    //compile project(':CountryPicker')
+
+
+    compile 'com.github.SocialbitGmbH:AndroidCountryPicker:-SNAPSHOT@aar'
 }
