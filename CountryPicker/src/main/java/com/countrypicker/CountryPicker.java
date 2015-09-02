@@ -1,6 +1,5 @@
 package com.countrypicker;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -26,7 +25,38 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-public class CountryPicker extends DialogFragment implements Comparator<Country> {
+public class CountryPicker extends DialogFragment {
+
+    public static final String TAG = "CountryPicker";
+
+    /**
+     * To support show as dialog
+     *
+     * @param dialogTitle
+     * @return
+     */
+    public static CountryPicker newInstance(String dialogTitle) {
+        CountryPicker picker = new CountryPicker();
+        Bundle bundle = new Bundle();
+        bundle.putString("dialogTitle", dialogTitle);
+        picker.setArguments(bundle);
+        return picker;
+    }
+
+    /**
+     * R.string.countries is a json string which is Base64 encoded to avoid
+     * special characters in XML. It's Base64 decoded here to get original json.
+     *
+     * @param context
+     * @return
+     * @throws java.io.IOException
+     */
+    private static String readFileAsString(Context context)
+            throws java.io.IOException {
+        String base64 = context.getResources().getString(R.string.countries);
+        byte[] data = Base64.decode(base64, Base64.DEFAULT);
+        return new String(data, "UTF-8");
+    }
 
     /**
      * View components
@@ -76,8 +106,10 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
      * is in English locale
      *
      * @param countryCode
-     * @return
+     * @return Currency code for the given country code
+     * @deprecated As this belongs not in this class or this project
      */
+    @Deprecated
     public static Currency getCurrencyCode(String countryCode) {
         try {
             return Currency.getInstance(new Locale("en", countryCode));
@@ -90,16 +122,16 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
     /**
      * Get all countries with code and name from res/raw/countries.json
      *
-     * @return
+     * @return List of all countries
      */
     private List<Country> getAllCountries() {
         if (allCountriesList == null) {
             try {
-                allCountriesList = new ArrayList<Country>();
+                allCountriesList = new ArrayList<>();
 
                 // Read from local file
                 String allCountriesString = readFileAsString(getActivity());
-                Log.d("countrypicker", "country: " + allCountriesString);
+                Log.d(TAG, "country: " + allCountriesString);
                 JSONObject jsonObject = new JSONObject(allCountriesString);
                 Iterator<?> keys = jsonObject.keys();
 
@@ -113,10 +145,15 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
                 }
 
                 // Sort the all countries list based on country name
-                Collections.sort(allCountriesList, this);
+                Collections.sort(allCountriesList, new Comparator<Country>() {
+                    @Override
+                    public int compare(Country lhs, Country rhs) {
+                        return lhs.getName().compareTo(rhs.getName());
+                    }
+                });
 
                 // Initialize selected countries with all countries
-                selectedCountriesList = new ArrayList<Country>();
+                selectedCountriesList = new ArrayList<>();
                 selectedCountriesList.addAll(allCountriesList);
 
                 // Return
@@ -130,42 +167,13 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
     }
 
     /**
-     * R.string.countries is a json string which is Base64 encoded to avoid
-     * special characters in XML. It's Base64 decoded here to get original json.
-     *
-     * @param context
-     * @return
-     * @throws java.io.IOException
-     */
-    private static String readFileAsString(Context context)
-            throws java.io.IOException {
-        String base64 = context.getResources().getString(R.string.countries);
-        byte[] data = Base64.decode(base64, Base64.DEFAULT);
-        return new String(data, "UTF-8");
-    }
-
-    /**
-     * To support show as dialog
-     *
-     * @param dialogTitle
-     * @return
-     */
-    public static CountryPicker newInstance(String dialogTitle) {
-        CountryPicker picker = new CountryPicker();
-        Bundle bundle = new Bundle();
-        bundle.putString("dialogTitle", dialogTitle);
-        picker.setArguments(bundle);
-        return picker;
-    }
-
-    /**
      * Create view
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate view
-        View view = inflater.inflate(R.layout.country_picker, null);
+        View view = inflater.inflate(R.layout.country_picker, container, false);
 
         // Get countries from the json
         getAllCountries();
@@ -235,7 +243,6 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
      *
      * @param text
      */
-    @SuppressLint("DefaultLocale")
     private void search(String text) {
         selectedCountriesList.clear();
 
@@ -247,13 +254,5 @@ public class CountryPicker extends DialogFragment implements Comparator<Country>
         }
 
         adapter.notifyDataSetChanged();
-    }
-
-    /**
-     * Support sorting the countries list
-     */
-    @Override
-    public int compare(Country lhs, Country rhs) {
-        return lhs.getName().compareTo(rhs.getName());
     }
 }

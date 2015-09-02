@@ -1,4 +1,4 @@
-package com.countrypickerexample;
+package com.countrypicker.example;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -17,7 +17,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(com.countrypickerexample.R.layout.activity_main);
 
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -36,7 +36,7 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-        transaction.replace(R.id.home, picker);
+        transaction.replace(com.countrypickerexample.R.id.home, picker);
 
         transaction.commit();
 
@@ -45,8 +45,8 @@ public class MainActivity extends FragmentActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        MenuItem item = menu.findItem(R.id.show_dialog);
+        getMenuInflater().inflate(com.countrypickerexample.R.menu.main, menu);
+        MenuItem item = menu.findItem(com.countrypickerexample.R.id.show_dialog);
         item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
             @Override
