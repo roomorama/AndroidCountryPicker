@@ -10,6 +10,14 @@ android {
         versionCode 11
         versionName '1.0.1'
     }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+        debug {
+            minifyEnabled false
+        }
+    }
 }
 
 dependencies {
