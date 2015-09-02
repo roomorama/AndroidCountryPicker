@@ -44,7 +44,7 @@ Note the library requires 'com.android.support:support-v4'
 
 ## How to use
 
-To use CountryPicker in your as a fragment:
+To use CountryPicker in your code as a fragment:
 
 ```java
 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -70,7 +70,6 @@ picker.setListener(new CountryPickerListener() {
 		// Invoke your function here
 	}
 });
-				
 ```
 
 ## About

@@ -10,7 +10,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="com.countrypickerexample.MainActivity"
+            android:name="com.countrypicker.example.MainActivity"
             android:label="@string/app_name">
 
             <intent-filter>

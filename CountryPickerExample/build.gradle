@@ -10,6 +10,7 @@ android {
         // Gets received by jitpack:
         //versionCode 11
         //versionName '1.0.1'
+        applicationId 'com.countrypicker.example'
     }
     buildTypes {
         release {

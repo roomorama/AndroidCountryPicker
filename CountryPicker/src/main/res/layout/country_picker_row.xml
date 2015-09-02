@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:ignore="UseCompoundDrawables">
 
     <ImageView
-        android:id="@+id/row_icon"
+        android:id="@+id/country_picker_row_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="10dp"
@@ -16,7 +17,7 @@
         tools:ignore="ContentDescription"/>
 
     <TextView
-        android:id="@+id/row_title"
+        android:id="@+id/country_picker_row_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
