@@ -34,7 +34,7 @@ Include country picker
 ```gradle
 dependencies {
 	// ...
-    compile 'com.github.SocialbitGmbH:AndroidCountryPicker:1.0.2'
+    compile 'com.github.SocialbitGmbH:AndroidCountryPicker:1.0.3@aar'
 	// ...
 }
 ```

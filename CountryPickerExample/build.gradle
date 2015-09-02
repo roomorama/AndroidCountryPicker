@@ -26,8 +26,5 @@ repositories {
 
 dependencies {
     compile 'com.android.support:support-v4:23.0.0'
-    //compile project(':CountryPicker')
-
-
-    compile 'com.github.SocialbitGmbH:AndroidCountryPicker:-SNAPSHOT@aar'
+    compile project(':CountryPicker')
 }
