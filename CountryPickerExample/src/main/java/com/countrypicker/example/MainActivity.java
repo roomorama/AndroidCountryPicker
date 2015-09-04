@@ -29,9 +29,7 @@ public class MainActivity extends FragmentActivity {
             public void onSelectCountry(String name, String code) {
                 Toast.makeText(
                         MainActivity.this,
-                        "Country Name: " + name + " - Code: " + code
-                                + " - Currency: "
-                                + CountryPicker.getCurrencyCode(code),
+                        "Country Name: " + name + " - Code: " + code,
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -58,9 +56,7 @@ public class MainActivity extends FragmentActivity {
                     public void onSelectCountry(String name, String code) {
                         Toast.makeText(
                                 MainActivity.this,
-                                "Country Name: " + name + " - Code: " + code
-                                        + " - Currency: "
-                                        + CountryPicker.getCurrencyCode(code),
+                                "Country Name: " + name + " - Code: " + code,
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
