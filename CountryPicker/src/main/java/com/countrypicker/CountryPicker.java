@@ -1,11 +1,9 @@
 package com.countrypicker;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Currency;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,8 +24,8 @@ public class CountryPicker extends DialogFragment {
     /**
      * To support show as dialog
      *
-     * @param dialogTitle
-     * @return
+     * @param dialogTitle String set as dialog title
+     * @return CountryPicker instance
      */
     public static CountryPicker newInstance(String dialogTitle) {
         CountryPicker picker = new CountryPicker();
@@ -43,144 +35,36 @@ public class CountryPicker extends DialogFragment {
         return picker;
     }
 
-    /**
-     * R.string.countries is a json string which is Base64 encoded to avoid
-     * special characters in XML. It's Base64 decoded here to get original json.
-     *
-     * @param context
-     * @return
-     * @throws java.io.IOException
-     */
-    private static String readFileAsString(Context context)
-            throws java.io.IOException {
-        String base64 = context.getResources().getString(R.string.countries);
-        byte[] data = Base64.decode(base64, Base64.DEFAULT);
-        return new String(data, "UTF-8");
-    }
-
-    /**
-     * View components
-     */
     private EditText searchEditText;
     private ListView countryListView;
-
-    /**
-     * Adapter for the listview
-     */
     private CountryListAdapter adapter;
-
-    /**
-     * Hold all countries, sorted by country name
-     */
-    private List<Country> allCountriesList;
-
-    /**
-     * Hold countries that matched user query
-     */
-    private List<Country> selectedCountriesList;
-
-    /**
-     * Listener to which country user selected
-     */
     private CountryPickerListener listener;
 
-    /**
-     * Set listener
-     *
-     * @param listener
-     */
-    public void setListener(CountryPickerListener listener) {
-        this.listener = listener;
-    }
+    private CountryProvider countryProvider;
 
-    public EditText getSearchEditText() {
-        return searchEditText;
-    }
+    private List<Country> selectedCountriesList = new ArrayList<>();
 
-    public ListView getCountryListView() {
-        return countryListView;
-    }
-
-    /**
-     * Convenient function to get currency code from country code currency code
-     * is in English locale
-     *
-     * @param countryCode
-     * @return Currency code for the given country code
-     * @deprecated As this belongs not in this class or this project
-     */
-    @Deprecated
-    public static Currency getCurrencyCode(String countryCode) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         try {
-            return Currency.getInstance(new Locale("en", countryCode));
-        } catch (Exception e) {
-
-        }
-        return null;
-    }
-
-    /**
-     * Get all countries with code and name from res/raw/countries.json
-     *
-     * @return List of all countries
-     */
-    private List<Country> getAllCountries() {
-        if (allCountriesList == null) {
-            try {
-                allCountriesList = new ArrayList<>();
-
-                // Read from local file
-                String allCountriesString = readFileAsString(getActivity());
-                Log.d(TAG, "country: " + allCountriesString);
-                JSONObject jsonObject = new JSONObject(allCountriesString);
-                Iterator<?> keys = jsonObject.keys();
-
-                // Add the data to all countries list
-                while (keys.hasNext()) {
-                    String key = (String) keys.next();
-                    Country country = new Country();
-                    country.setCode(key);
-                    country.setName(jsonObject.getString(key));
-                    allCountriesList.add(country);
-                }
-
-                // Sort the all countries list based on country name
-                Collections.sort(allCountriesList, new Comparator<Country>() {
-                    @Override
-                    public int compare(Country lhs, Country rhs) {
-                        return lhs.getName().compareTo(rhs.getName());
-                    }
-                });
-
-                // Initialize selected countries with all countries
-                selectedCountriesList = new ArrayList<>();
-                selectedCountriesList.addAll(allCountriesList);
-
-                // Return
-                return allCountriesList;
-
-            } catch (Exception e) {
-                e.printStackTrace();
+            countryProvider = new CountryProvider(getActivity());
+            for (Country country : countryProvider.getCountries()) {
+                selectedCountriesList.add(country);
             }
+        } catch (Exception e) {
+            Log.e(TAG, Log.getStackTraceString(e));
         }
-        return null;
     }
 
-    /**
-     * Create view
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate view
         View view = inflater.inflate(R.layout.country_picker, container, false);
-
-        // Get countries from the json
-        getAllCountries();
 
         // Set dialog title if show as dialog
         Bundle args = getArguments();
-        if (args != null) {
+        if (args != null && getDialog() != null) {
             String dialogTitle = args.getString("dialogTitle");
             getDialog().setTitle(dialogTitle);
 
@@ -196,14 +80,15 @@ public class CountryPicker extends DialogFragment {
                 .findViewById(R.id.country_picker_search);
         countryListView = (ListView) view
                 .findViewById(R.id.country_picker_listview);
+        return view;
+    }
 
-        // Set adapter
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         adapter = new CountryListAdapter(getActivity(), selectedCountriesList);
         countryListView.setAdapter(adapter);
-
-        // Inform listener
         countryListView.setOnItemClickListener(new OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
@@ -215,44 +100,65 @@ public class CountryPicker extends DialogFragment {
             }
         });
 
-        // Search for which countries matched user query
         searchEditText.addTextChangedListener(new TextWatcher() {
-
             @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                search(s.toString());
+                filter(s.toString());
             }
         });
-
-        return view;
     }
 
     /**
-     * Search allCountriesList contains text and put result into
-     * selectedCountriesList
+     * Get the listener to receive countries set
      *
-     * @param text
+     * @return Country selected listener
      */
-    private void search(String text) {
-        selectedCountriesList.clear();
+    public CountryPickerListener getListener() {
+        return listener;
+    }
 
-        for (Country country : allCountriesList) {
-            if (country.getName().toLowerCase(Locale.ENGLISH)
-                    .contains(text.toLowerCase())) {
+    /**
+     * Set the listener to receive the country selected
+     *
+     * @param listener Country selected listener
+     */
+    public void setListener(CountryPickerListener listener) {
+        this.listener = listener;
+    }
+
+    /**
+     * Get the edit text for filtering countries. Use this to customize the view
+     *
+     * @return Filter edit text
+     */
+    public EditText getSearchEditText() {
+        return searchEditText;
+    }
+
+    /**
+     * Get the list view showing the countries. Use this to customize the view
+     *
+     * @return List view containing countries
+     */
+    public ListView getCountryListView() {
+        return countryListView;
+    }
+
+    private void filter(String text) {
+        selectedCountriesList.clear();
+        for (Country country : countryProvider.getCountries()) {
+            if (country.getName().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase())) {
                 selectedCountriesList.add(country);
             }
         }
-
         adapter.notifyDataSetChanged();
     }
 }
