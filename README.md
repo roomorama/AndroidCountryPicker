@@ -72,6 +72,17 @@ picker.setListener(new CountryPickerListener() {
 });
 ```
 
+To receive the data that the picker uses:
+
+```java
+CountryProvider countryProvider = new CountryProvider(context);
+
+Country de = countryProvider.getCountryByCode("DE"); // ignores case
+Log.d(de.getName()) // Germany
+
+List<Country> countries = countryProvider.getCountries();
+```
+
 ## About
 The data is from CountryPicker by nicklockwood (https://github.com/nicklockwood/CountryPicker)
 
