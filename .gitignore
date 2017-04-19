@@ -12,10 +12,17 @@
 bin/
 gen/
 
-# Local configuration file (sdk path, etc)
-local.properties
-
 # Eclipse project files
 .classpath
 .project
 .settings
+
+# Android Studio
+.gradle/
+.idea/
+build/
+*.iml
+local.properties
+
+# MacOS
+.DS_Store
