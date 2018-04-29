@@ -1,23 +1,18 @@
 package com.countrypicker;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Currency;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,8 +50,14 @@ public class CountryPicker extends DialogFragment implements
 	private CountryPickerListener listener;
 
 	/**
+	 * Use collator to sort locale-aware.
+	 */
+	private static final Collator sCollator = Collator.getInstance();
+
+
+	/**
 	 * Set listener
-	 * 
+	 *
 	 * @param listener
 	 */
 	public void setListener(CountryPickerListener listener) {
@@ -74,7 +75,7 @@ public class CountryPicker extends DialogFragment implements
 	/**
 	 * Convenient function to get currency code from country code currency code
 	 * is in English locale
-	 * 
+	 *
 	 * @param countryCode
 	 * @return
 	 */
@@ -89,7 +90,7 @@ public class CountryPicker extends DialogFragment implements
 
 	/**
 	 * Get all countries with code and name from res/raw/countries.json
-	 * 
+	 *
 	 * @return
 	 */
 	private List<Country> getAllCountries() {
@@ -97,18 +98,10 @@ public class CountryPicker extends DialogFragment implements
 			try {
 				allCountriesList = new ArrayList<Country>();
 
-				// Read from local file
-				String allCountriesString = readFileAsString(getActivity());
-				Log.d("countrypicker", "country: " + allCountriesString);
-				JSONObject jsonObject = new JSONObject(allCountriesString);
-				Iterator<?> keys = jsonObject.keys();
-
-				// Add the data to all countries list
-				while (keys.hasNext()) {
-					String key = (String) keys.next();
+				for (String cc : Locale.getISOCountries()) {
 					Country country = new Country();
-					country.setCode(key);
-					country.setName(jsonObject.getString(key));
+					country.setCode(cc);
+					country.setName(new Locale("", cc).getDisplayCountry());
 					allCountriesList.add(country);
 				}
 
@@ -130,23 +123,8 @@ public class CountryPicker extends DialogFragment implements
 	}
 
 	/**
-	 * R.string.countries is a json string which is Base64 encoded to avoid
-	 * special characters in XML. It's Base64 decoded here to get original json.
-	 * 
-	 * @param context
-	 * @return
-	 * @throws java.io.IOException
-	 */
-	private static String readFileAsString(Context context)
-			throws java.io.IOException {
-		String base64 = context.getResources().getString(R.string.countries);
-		byte[] data = Base64.decode(base64, Base64.DEFAULT);
-		return new String(data, "UTF-8");
-	}
-
-	/**
 	 * To support show as dialog
-	 * 
+	 *
 	 * @param dialogTitle
 	 * @return
 	 */
@@ -165,7 +143,7 @@ public class CountryPicker extends DialogFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate view
-		View view = inflater.inflate(R.layout.country_picker, null);
+		View view = inflater.inflate(R.layout.country_picker, container, false);
 
 		// Get countries from the json
 		getAllCountries();
@@ -232,7 +210,7 @@ public class CountryPicker extends DialogFragment implements
 	/**
 	 * Search allCountriesList contains text and put result into
 	 * selectedCountriesList
-	 * 
+	 *
 	 * @param text
 	 */
 	@SuppressLint("DefaultLocale")
@@ -254,7 +232,7 @@ public class CountryPicker extends DialogFragment implements
 	 */
 	@Override
 	public int compare(Country lhs, Country rhs) {
-		return lhs.getName().compareTo(rhs.getName());
+		return sCollator.compare(lhs.getName(), rhs.getName());
 	}
 
 }

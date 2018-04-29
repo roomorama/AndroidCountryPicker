@@ -27,7 +27,7 @@ public class CountryListAdapter extends BaseAdapter {
 	 * http://stackoverflow.com/
 	 * questions/3042961/how-can-i-get-the-resource-id-of
 	 * -an-image-if-i-know-its-name
-	 * 
+	 *
 	 * @param drawableName
 	 * @return
 	 */
@@ -46,7 +46,7 @@ public class CountryListAdapter extends BaseAdapter {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param context
 	 * @param countries
 	 */
@@ -60,19 +60,16 @@ public class CountryListAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return countries.size();
 	}
 
 	@Override
-	public Object getItem(int arg0) {
-		// TODO Auto-generated method stub
+	public Object getItem(int position) {
 		return null;
 	}
 
 	@Override
-	public long getItemId(int arg0) {
-		// TODO Auto-generated method stub
+	public long getItemId(int position) {
 		return 0;
 	}
 
@@ -87,7 +84,7 @@ public class CountryListAdapter extends BaseAdapter {
 
 		if (convertView == null) {
 			cell = new Cell();
-			cellView = inflater.inflate(R.layout.row, null);
+			cellView = inflater.inflate(R.layout.row, parent, false);
 			cell.textView = (TextView) cellView.findViewById(R.id.row_title);
 			cell.imageView = (ImageView) cellView.findViewById(R.id.row_icon);
 			cellView.setTag(cell);
@@ -106,7 +103,7 @@ public class CountryListAdapter extends BaseAdapter {
 
 	/**
 	 * Holder for the cell
-	 * 
+	 *
 	 */
 	static class Cell {
 		public TextView textView;
