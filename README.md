@@ -15,7 +15,7 @@ The functions are simple:
 
 2) Inform client which country user has selected
 
-3) Convenient function to get currency code of the selected country
+3) Convenient function to get country  code of the selected country
 
 ## How to use
 
